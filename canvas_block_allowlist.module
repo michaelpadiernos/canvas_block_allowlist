@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Custom hooks for Canvas Block Allowlist.
+ */
+
+/**
+ * Implements hook_canvas_palette_page_templates_alter().
+ */
+function canvas_block_allowlist_canvas_palette_page_templates_alter(array &$info): void {
+  $module_path = \Drupal::service('extension.list.module')->getPath('canvas_palette');
+
+  $page_templates = [
+    'page-width' => [
+      'label' => 'Page Width',
+      'template' => 'page--canvas--full-width',
+    ],
+    'page-width-without-header' => [
+      'label' => 'Page Width Without Header',
+      'template' => 'page--canvas--without-header',
+    ],
+    'page-width-without-header-footer' => [
+      'label' => 'Page Width Without Header & Footer',
+      'template' => 'page--canvas--without-header-footer',
+    ],
+    'content-width' => [
+      'label' => 'Content Width',
+      'template' => 'page--canvas--colorful',
+    ],
+    'content-width-without-header' => [
+      'label' => 'Content Width Without Header',
+      'template' => 'page--canvas--without-header',
+    ],
+    'content-width-without-header-footer' => [
+      'label' => 'Content Width Without Header & Footer',
+      'template' => 'page--canvas--without-header-footer',
+    ],
+  ];
+
+  foreach (array_keys($info) as $token) {
+    unset($info[$token]);
+  }
+
+  foreach ($page_templates as $token => $definition) {
+    $info[$token] = [
+      'label' => $definition['label'],
+      'template' => $definition['template'],
+      'path' => $module_path . '/templates/page',
+    ];
+  }
+}
