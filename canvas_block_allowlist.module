@@ -52,3 +52,16 @@ function canvas_block_allowlist_canvas_palette_page_templates_alter(array &$info
     ];
   }
 }
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function canvas_block_allowlist_entity_base_field_info_alter(array &$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type): void {
+  if ($entity_type->id() !== 'canvas_page') {
+    return;
+  }
+
+  if (isset($fields['canvas_palette_page_template'])) {
+    $fields['canvas_palette_page_template']->setDefaultValue('content-width');
+  }
+}
