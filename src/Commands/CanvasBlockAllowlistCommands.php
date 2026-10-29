@@ -183,7 +183,9 @@ final class CanvasBlockAllowlistCommands extends DrushCommands {
       throw new \RuntimeException(sprintf('Unable to create allowlist directory "%s".', $directory));
     }
 
+    // audit-ignore-next-line: DEBUG_DUMP -- Yaml::dump() serializes to YAML; it is not the VarDumper dump().
     $yaml = Yaml::dump(['blocks' => array_values($configured)], 4, 2);
+    // audit-ignore-next-line: FILE_PUT_CONTENTS_VARIABLE -- path comes from resolveAllowlistPath(): the project root plus class constants.
     if (file_put_contents($path, $yaml) === FALSE) {
       throw new \RuntimeException(sprintf('Unable to write allowlist file "%s".', $path));
     }
