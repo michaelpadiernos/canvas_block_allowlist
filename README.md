@@ -12,11 +12,14 @@ This module adds Drush commands to compare and update:
 
 This is useful when you want to quickly audit whether your allowlist matches the current Canvas configuration.
 
+The module also sets the page templates that Canvas Palette offers for Canvas pages (see "Canvas page templates" below).
+
 ## Requirements
 
 - Drupal 11
 - Canvas module enabled
 - Drush
+- Canvas Palette (`canvas_palette`), for the page template features only. It is not a declared dependency, and those features do nothing without it.
 
 ## Installation
 
@@ -102,6 +105,31 @@ The add command:
 - The file is read from the project asset config directory adjacent to the Drupal root (`../assets/config/canvas/canvas-block-allowlist.yml` from the Drupal root, with legacy fallbacks to `../config/canvas/canvas-block-allowlist.yml` and `../config/canvas-block-allowlist.yml`).
 - If the file is missing or invalid YAML, the command treats it as empty and continues safely.
 
+## Canvas page templates
+
+`canvas_block_allowlist.module` also changes two things about Canvas pages:
+
+- `hook_canvas_palette_page_templates_alter()` replaces the page templates that Canvas Palette offers with the six below. The templates are in the `templates/page` folder of the `canvas_palette` module.
+- `hook_entity_base_field_info_alter()` sets the default of the `canvas_palette_page_template` field on `canvas_page` to `content-width`.
+
+| Option | Template |
+| --- | --- |
+| Page Width | `page--canvas--full-width` |
+| Page Width Without Header | `page--canvas--without-header` |
+| Page Width Without Header & Footer | `page--canvas--without-header-footer` |
+| Content Width | `page--canvas--colorful` |
+| Content Width Without Header | `page--canvas--without-header` |
+| Content Width Without Header & Footer | `page--canvas--without-header-footer` |
+
+The "Page Width" and "Content Width" options share the same "without header" and "without header & footer" templates.
+
+## Files
+
+- `canvas_block_allowlist.info.yml`: module metadata.
+- `canvas_block_allowlist.module`: the Canvas page template hooks.
+- `drush.services.yml`: registers the Drush commands.
+- `src/Commands/CanvasBlockAllowlistCommands.php`: the `canvas-block-allowlist:list` and `canvas-block-allowlist:add` commands.
+
 ## Development
 
-This module is intentionally lightweight and focused on auditing Canvas block allowlist state.
+The Drush commands are intentionally lightweight and focused on auditing Canvas block allowlist state.
